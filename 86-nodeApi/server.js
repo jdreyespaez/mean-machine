@@ -7,8 +7,6 @@ var mongoose    = require('mongoose');
 var User        = require('./app/models/user');
 var port        = process.env.PORT || 8080;
 
-// conectando con la db en modulus.io
-mongoose.connect('mongodb://jdreyespaez:modulus@meanmachine-55307.onmodulus.net')
 
 // CONFIGURACIÓN DE LA APP
 // usando body parser para tomar los datos POST en JSON
@@ -27,6 +25,8 @@ app.use(function(req, res, next) {
 // cargue todos los requests en la consola
 app.use(morgan('dev'));
 
+// conectando con la db en modulus.io
+mongoose.connect('mongodb://node:noder@novus.modulusmongo.net:27017/Iganiq8o'); 
 // RUTAS DE LA API
 
 // ruta básica del inicio
@@ -46,7 +46,7 @@ apiRouter.use(function(req, res, next) {
   // aquí se hará la autenticación de usuarios
 
   next();
-})
+});
 
 // testeando que se puede acceder al API
 // PostMan: GET hht://localhost:8080/api
