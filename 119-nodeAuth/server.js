@@ -6,7 +6,10 @@ var morgan      = require('morgan'); // usado para ver los requests
 var mongoose    = require('mongoose');
 var User        = require('./app/models/user');
 var port        = process.env.PORT || 8080;
+var jwt         = require('jsonwebtoken');
 
+// el super secret para crear tokens
+var superSecret = 'ilovescotchscotchyscotchscotch';
 
 // CONFIGURACIÓN DE LA APP
 // usando body parser para tomar los datos POST en JSON
@@ -36,6 +39,58 @@ app.get('/', function(req, res) {
 
 // tomar una instancia del enrutador de express
 var apiRouter = express.Router();
+
+// CHAPTER 10: Node Authentication
+// la ruta para autenticar usuarios
+// Postman: POST http://localhost:8080/authenticate
+apiRouter.post('/authenticate', function(req, res) {
+
+  // encontrar el usuario
+  // seleccionar el name, username y password explícitamente
+  User.findOne({
+    username: req.body.username
+  }).select('name username password').exec(function(err, user) {
+
+    if (err) throw err;
+
+    // ningún usuario con tal username se encontró
+    if (!user) {
+      res.json({
+        success: false,
+        messsage: 'Autenticación fallida. Usuario no encontrado.'
+      });
+    } else if (user) {
+
+      // revisar si el password coincide
+      var validPassword = user.comparePassword(req.body.password);
+      if (!validPassword) {
+        res.json({
+          success: false,
+          message: 'Autenticación fallida. Clave errada.'
+        });
+      } else {
+
+        // si el usuario y la clave son correctas
+        // entonces crear el token
+
+        var token = jwt.sign({
+          name: user.name,
+          username: user.username
+        }, superSecret, {
+          expiresInMinutes: 1440 // expira en 24 horas
+        });
+
+        // devolver la información incluyendo el token como JSON
+        res.json({
+          success: true,
+          message: '¡Disfruta tu token',
+          token: token
+        });
+      }
+    }
+
+  });
+});
 
 // middleware para todos los requests
 apiRouter.use(function(req, res, next) {
