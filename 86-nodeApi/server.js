@@ -37,6 +37,17 @@ app.get('/', function(req, res) {
 // tomar una instancia del enrutador de express
 var apiRouter = express.Router();
 
+// middleware para todos los requests
+apiRouter.use(function(req, res, next) {
+  // hacer login
+  console.log('Alguien entró a la API');
+
+  // más adelante se usará más en Ch10
+  // aquí se hará la autenticación de usuarios
+
+  next();
+})
+
 // testeando que se puede acceder al API
 // PostMan: GET hht://localhost:8080/api
 apiRouter.get('/', function(req, res) {
