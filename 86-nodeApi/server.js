@@ -63,27 +63,39 @@ apiRouter.route('/users')
   // Postman: POST http://localhost:8080/api/users
   .post(function(req, res) {
 
-    // crear un nueva instancia al modelo User
-    var user = new User();
+      // crear un nueva instancia al modelo User
+      var user = new User();
 
-    // definir la información de los users
-    user.name     = req.body.name;
-    user.username = req.body.username;
-    user.password = req.body.password;
+      // definir la información de los users
+      user.name     = req.body.name;
+      user.username = req.body.username;
+      user.password = req.body.password;
 
-    // guardar el usuario y verificar errores
-    user.save(function(err) {
-      if (err) {
-        // duplicar la entrada ??
-        if (err.code == 11000)
-          return res.json({ success: false, message: 'Un usuario con ese username ya existe.' });
-        else
-          return res.send(err);
-        }
-          res.json({ message: '¡Usuario creado!'})
+      // guardar el usuario y verificar errores
+      user.save(function(err) {
+        if (err) {
+          // duplicar la entrada ??
+          if (err.code == 11000)
+            return res.json({ success: false, message: 'Un usuario con ese username ya existe.' });
+          else
+            return res.send(err);
+          }
+            res.json({ message: '¡Usuario creado!'});
+      });
+    })
+
+    // acceder a todos los usuarios
+    // Postman: GET http://localhost:8080/api/users
+    .get(function(req, res) {
+        User.find(function(err, users) {
+          if (err) res.send(err);
+
+          // return todos los usuarios
+          res.json(users);
+        });
     });
 
-  });
+  
 
 
 // MARCANDO LAS RUTAS
