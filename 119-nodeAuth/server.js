@@ -100,9 +100,40 @@ apiRouter.use(function(req, res, next) {
   // más adelante se usará más en Ch10
   // aquí se hará la autenticación de usuarios
 
-  next();
-});
+  // revisar header, url params o post params para el token
+  var token = req.body.token || req.param('token') || req.headers['x-access-token'];
 
+  // decodificar el token
+  if (token) {
+
+    // verificar secret y checka si expira
+    jwt.verify(token, superSecret, function(err, decoded) {
+      if (err) {
+        return res.status(403).send({
+          success: false,
+          message: 'Falló al autenticar token.'
+        });
+      } else {
+        // si todo está bien, guardar para otras rutas
+        req.decoded = decoded;
+
+        // se ubicó para darle paso cuando todo esté correcto
+        next();
+
+      }
+    });
+  } else {
+
+    // si no hay token devolver como la rta 403 HTTP (access forbidden)
+    // y un mensaje de error
+    return res.status(403).send({
+      success: false,
+      message: 'No hay token activo.'
+    });
+  }
+
+  // next(); debía estar acá
+});
 
 
 // testeando que se puede acceder al API
