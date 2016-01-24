@@ -26,9 +26,9 @@ app.use(function(req, res, next) {
 app.use(morgan('dev'));
 
 // conectando con la db en modulus.io
-mongoose.connect('mongodb://node:noder@novus.modulusmongo.net:27017/Iganiq8o'); 
-// RUTAS DE LA API
+mongoose.connect('localhost:27017/usuarios');
 
+// RUTAS DE LA API
 // ruta básica del inicio
 app.get('/', function(req, res) {
   res.send('¡Bienvenido a la página de inicio!');
@@ -48,13 +48,43 @@ apiRouter.use(function(req, res, next) {
   next();
 });
 
+
+
 // testeando que se puede acceder al API
 // PostMan: GET hht://localhost:8080/api
 apiRouter.get('/', function(req, res) {
   res.json({ message: 'Yey! Bienvenido al api!' });
 });
 
-// Aquí habrán más rutas
+// las rutas que finalizan en /users
+apiRouter.route('/users')
+
+  // creando un usurio
+  // Postman: POST http://localhost:8080/api/users
+  .post(function(req, res) {
+
+    // crear un nueva instancia al modelo User
+    var user = new User();
+
+    // definir la información de los users
+    user.name     = req.body.name;
+    user.username = req.body.username;
+    user.password = req.body.password;
+
+    // guardar el usuario y verificar errores
+    user.save(function(err) {
+      if (err) {
+        // duplicar la entrada ??
+        if (err.code == 11000)
+          return res.json({ success: false, message: 'Un usuario con ese username ya existe.' });
+        else
+          return res.send(err);
+        }
+          res.json({ message: '¡Usuario creado!'})
+    });
+
+  });
+
 
 // MARCANDO LAS RUTAS
 // todas las rutas tendrán como prefijo /api
