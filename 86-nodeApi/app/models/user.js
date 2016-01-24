@@ -15,7 +15,7 @@ UserSchema.pre('save', function(next) {
   var user = this;
 
   // esconder el password antes que sea cambiado o sea un usuario nuevo
-  if (!user.isModified('password')) return netx();
+  if (!user.isModified('password')) return next();
 
   // crear el hash
   bcrypt.hash(user.password, null, null, function(err, hash) {

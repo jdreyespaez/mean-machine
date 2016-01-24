@@ -16,7 +16,7 @@ app.use(bodyParser.json());
 // configurar el app para que haga CORS requests
 app.use(function(req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
+  res.setHeader('Access-Control-Allow-Methods', '*');
   res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With, content-type, Authorization');
 
   next();
@@ -98,7 +98,7 @@ apiRouter.route('/users')
 // Getting a Single User (GET /api/users/:user_id)
 apiRouter.route('/users/:user_id')
 
-  // tomar el useria con id user_id
+  // tomar el userio con id user_id
   // Postman: GET http://localhost:8080/api/users/:user_id
   .get(function(req, res) {
     User.findById(req.params.user_id, function(err, user) {
@@ -108,6 +108,33 @@ apiRouter.route('/users/:user_id')
       res.json(user);
     });
   })
+
+// Updating a User's Info (PUT /api/users/:user_id)
+
+  // actualizar el usuario con ese id
+  // Postman: PUT http://localhost:8080/api/users/:user_id
+  .put(function(req, res) {
+
+    // utilizar el modelo user para buscar el usuario que queremos
+    User.findById(req.params.user_id, function(err, user) {
+
+      if(err) res.send(err);
+
+      // actualizar al usuario sólo si es nuevo
+      if (req.body.name) user.name          = req.body.name;
+      if (req.body.username) user.username  = req.body.username;
+      if (req.body.password) user.password  = req.body.password;
+
+      // guardarlo
+      user.save(function(err) {
+        if (err) res.send(err);
+        // devolver un mensaje
+
+        res.json({ message: '¡Usuario actualizado!', usuario: user});
+      });
+
+    });
+  });
 
 // MARCANDO LAS RUTAS
 // todas las rutas tendrán como prefijo /api
