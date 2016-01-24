@@ -95,8 +95,19 @@ apiRouter.route('/users')
         });
     });
 
-  
+// Getting a Single User (GET /api/users/:user_id)
+apiRouter.route('/users/:user_id')
 
+  // tomar el useria con id user_id
+  // Postman: GET http://localhost:8080/api/users/:user_id
+  .get(function(req, res) {
+    User.findById(req.params.user_id, function(err, user) {
+      if (err) res.send(err);
+
+      // devolver ESE usuario
+      res.json(user);
+    });
+  })
 
 // MARCANDO LAS RUTAS
 // todas las rutas tendrán como prefijo /api
