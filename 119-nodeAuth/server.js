@@ -236,6 +236,12 @@ apiRouter.route('/users/:user_id')
     });
   });
 
+// un punto final de la API para GET user info loggedIn
+// esto nos servirá para Angular, "Hola, Chris!"
+apiRouter.get('/me', function(req, res) {
+  res.send(req.decoded);
+});
+
 // MARCANDO LAS RUTAS
 // todas las rutas tendrán como prefijo /api
 app.use('/api', apiRouter);
