@@ -1,7 +1,7 @@
 angular.module('routerApp', [])
 
 // creando los controladores
-// éste será el que maneje TODO el siio
+// éste será el que maneje ENTERO el siio
 .controller('mainController', function() {
 
   var vm = this;
