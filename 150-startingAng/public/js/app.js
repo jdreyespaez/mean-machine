@@ -1,4 +1,5 @@
-angular.module('routerApp', [])
+// así se agrega lo configurado en app.routes.js
+angular.module('routerApp', ['routerRoutes'])
 
 // creando los controladores
 // éste será el que maneje ENTERO el siio
@@ -10,7 +11,7 @@ angular.module('routerApp', [])
   vm.bigMessage = 'Un mar tranquilo nunca hará a un marino hábil.';
 })
 // el controlador específico del inicio
-.controller('homeController', function() {
+.controller('inicioController', function() {
 
   var vm = this;
 

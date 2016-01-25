@@ -41,11 +41,11 @@
 
     <!-- CONTENIDO PRINCIPAL Y VISTAS INYECTADAS -->
     <main>
-      <div class="jumbotron">
-        <h1>{{ main.bigMessage }}</h1>
-      </div>
+
       <!-- los templates de angular aquí -->
       <!-- aquí se inyecta el contenido -->
+      <div ng-view></div>
+
     </main>
   </body>
 </html>
