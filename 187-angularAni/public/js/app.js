@@ -1,5 +1,5 @@
 // así se agrega lo configurado en app.routes.js
-angular.module('routerApp', ['routerRoutes'])
+angular.module('routerApp', ['routerRoutes', 'ngAnimate'])
 
 // creando los controladores
 // éste será el que maneje ENTERO el siio
