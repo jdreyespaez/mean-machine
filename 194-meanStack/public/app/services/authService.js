@@ -19,10 +19,10 @@ angular.module('authService', [])
       password: password
     })
 
-    .success(function(data) {
-      AuthToken.setToken(data.token);
-      return data;
-    });
+      .success(function(data) {
+        AuthToken.setToken(data.token);
+        return data;
+      });
   };
 
   // log a user out by clearing the token
@@ -82,15 +82,35 @@ angular.module('authService', [])
 //===================
 // configuración de la app para integrar los tokens a los requests
 //===================
-.factory('AuthInterceptor', function($q, AuthToken) {
+.factory('AuthInterceptor', function($q,$location, AuthToken) {
   var interceptorFactory = {};
 
-  // pegar el token para cada request
+    // this will happen on all HTTP requests
+    interceptorFactory.request = function(config) {
 
-  // redireccionar si el token no está autenticado
+      // grab the token
+      var token = AuthToken.getToken();
+
+      // if the token exists, add it to the header as x-access-token
+      if (token)
+        config.headers['x-access-token'] = token;
+
+      return config;
+    };
+
+  // happens on response errores
+  interceptorFactory.responseError = function(response) {
+
+    // if our server returns a 403 forbidden response
+    if (response.status == 403) {
+      AuthToken.setToken();
+      $location.path('/login');
+    }
+
+    // return the errors form the server as a promise
+    return $q.reject(response);
+  };
 
   return interceptorFactory;
 
 });
-
-})
