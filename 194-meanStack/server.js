@@ -5,6 +5,7 @@ var bodyParser  = require('body-parser');
 var config      = require('./config');
 var morgan      = require('morgan'); // usado para ver los requests
 var mongoose    = require('mongoose');
+var path        = require('path');
 
 // CONFIGURACIÓN DE LA APP
 // usando body parser para tomar los datos POST en JSON
@@ -39,12 +40,12 @@ app.use(express.static(__dirname + '/public'));
 // MARCANDO LAS RUTAS
 // todas las rutas tendrán como prefijo /api
 var apiRoutes = require('./app/routes/api')(app, express);
-app.use('/api', apiRouter);
+app.use('/api', apiRoutes);
 
 // MAIN CATCHALL ROUTE
 // SEND USERS TO FRONTEND
 app.get('*', function(req, res) {
-  res.sendFile(path.join(__dirnam + '/public/app/views/index.html'));
+  res.sendFile(path.join(__dirname + '/public/app/views/index.html'));
 });
 
 // INICIANDO EL SERVIDOR
