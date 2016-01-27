@@ -13,17 +13,19 @@ angular.module('mainCtrl', [])
 
     // get user information on route change
     Auth.getUser()
-      .success(function(data) {
+    .then(function(data) {
         vm.user = data;
       });
   });
 
   // function to handle login form
   vm.doLogin = function() {
+    vm.processing = true;
 
     // call the Auth.login() function
     Auth.login(vm.loginData.username, vm.loginData.password)
       .success(function(data) {
+        vm.processing = false;
 
         // if a user successfully logs in, redirect to users page
         $location.path('/users');

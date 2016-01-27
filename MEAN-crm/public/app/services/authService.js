@@ -43,7 +43,7 @@ angular.module('authService', [])
   // get the logged in user
   authFactory.getUser = function() {
     if (AuthToken.getToken())
-      return $http.get('/api/me');
+      return $http.get('/api/me', { cache : true });
     else
       return $q.reject({ message: 'El usuario no tiene token.' });
   };
@@ -70,9 +70,9 @@ angular.module('authService', [])
     // si no hay token, límpielo de local storage
     authTokenFactory.setToken = function(token) {
       if (token)
-        &window.localStorage.setItem('token', token);
+        $window.localStorage.setItem('token', token);
       else
-        &window.localStorage.removeItem('token');
+        $window.localStorage.removeItem('token');
     };
 
     // set the token or clear the token
