@@ -17,7 +17,7 @@ angular.module('userService', [])
 
   // crear un usuario
   userFactory.create = function(userData) {
-    return $http.post('/api/users/' + userData);
+    return $http.post('/api/users/', userData);
   };
 
   // actualizar usuario
@@ -27,7 +27,7 @@ angular.module('userService', [])
 
   // eliminar usuario
   userFactory.delete = function(id) {
-    return $http.delete('/api/users' + id);
+    return $http.delete('/api/users/' + id);
   };
 
   // return todo el objeto userFactory
