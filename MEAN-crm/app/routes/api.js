@@ -46,7 +46,7 @@ module.exports = function(app, express) {
             name: user.name,
             username: user.username
           }, superSecret, {
-            expiresInMinutes: 1 // expira en 24 horas
+            expiresInMinutes: 1440 // expira en 24 horas
           });
 
           // devolver la información incluyendo el token como JSON
